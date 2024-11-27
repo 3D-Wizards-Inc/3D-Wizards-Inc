@@ -23,12 +23,6 @@ const AccountInfo: React.FC = () => {
           <h3>Account: </h3>
           {currentUser}
         </Col>
-        <Col md={8}>
-          <h3 className="py-4">Cart:</h3>
-          <p>
-            Cart list items here:
-          </p>
-        </Col>
       </Row>
       <Row className="justify-content-center align-items-center m-3">
         <Col md={8}>
