@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { Option, Size, Color } from '@prisma/client';
 
 export const AddStuffSchema = Yup.object({
   name: Yup.string().required(),
@@ -14,32 +13,4 @@ export const EditStuffSchema = Yup.object({
   quantity: Yup.number().positive().required(),
   condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
   owner: Yup.string().required(),
-});
-
-// Define the TypeScript interface for the form data
-export interface ICreateProductForm {
-  id?: number;
-  quantity: number;
-  owner: string;
-  option: Option;
-  size: Size;
-  color: Color[];
-}
-
-export const CreateProductSchema = Yup.object({
-  option: Yup.mixed<Option>()
-    .oneOf(Object.values(Option))
-    .required('Option is required'),
-  size: Yup.mixed<Size>()
-    .oneOf(Object.values(Size))
-    .required('Size is required'),
-  color: Yup.array()
-    .of(Yup.mixed<Color>().oneOf(Object.values(Color)).required())
-    .min(1, 'At least one color is required') // Ensures at least one color is selected
-    .required('Color is required'),
-  quantity: Yup.number()
-    .required('Quantity is required')
-    .positive('Quantity must be a positive number')
-    .integer('Quantity must be an integer'),
-  owner: Yup.string().required('Owner is required'),
 });

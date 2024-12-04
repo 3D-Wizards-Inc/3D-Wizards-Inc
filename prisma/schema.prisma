@@ -11,10 +11,10 @@ generator client {
 datasource db {
   provider = "postgresql"
   // for local development
-  url      = env("DATABASE_URL")
+  // url      = env("DATABASE_URL")
   // for Vercel
-  // url       = env("POSTGRES_PRISMA_URL")
-  // directUrl = env("POSTGRES_URL_NON_POOLING")
+   url       = env("POSTGRES_PRISMA_URL")
+   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 enum Role {
@@ -41,50 +41,5 @@ model Stuff {
   name      String
   quantity  Int
   condition Condition
-  owner     String
-}
-
-enum Option { 
-  CRYSTAL_DRAGON
-  WINGED_CRYSTAL_DRAGON
-  MECHANICAL_DRAGON
-  IMPERIAL_DRAGON
-  BABY_DRAGON
-  FROG
-  AXOLOTL
-  GECKO
-  RAT
-  FERRET
-  KNIGHT
-  SAMURAI
-}
-
-enum Size {
-  x0_5
-  x1
-  x2
-  x3
-}
-
-enum Color {
-  red
-  pink
-  orange
-  yellow
-  green
-  blue
-  purple
-  brown
-  black
-  gray
-  white
-}
-
-model Product {
-  id        Int       @id @default(autoincrement())
-  option    Option
-  size      Size
-  color     Color[]
-  quantity  Int
   owner     String
 }

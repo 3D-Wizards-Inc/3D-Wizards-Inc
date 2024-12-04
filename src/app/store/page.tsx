@@ -19,7 +19,8 @@ type Product = {
   price?: string;
   basePrice?: string;
   image: string;
-  size: { min: number, max: number };
+  redirect: string;
+  size: { min: number; max: number };
   pickupInperson?: boolean;
 };
 
@@ -34,7 +35,9 @@ const products: Product[] = [
     thirdColor: [],
     price: '$25',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -50,7 +53,9 @@ const products: Product[] = [
     thirdColor: [],
     price: '$25',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -66,7 +71,9 @@ const products: Product[] = [
     thirdColor: ['red', 'blue'], // Array of color names
     basePrice: '$10',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -82,7 +89,9 @@ const products: Product[] = [
     thirdColor: [],
     price: '$20',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -96,8 +105,10 @@ const products: Product[] = [
     secondaryColor: [], // Array of color names
     thirdColor: [],
     price: '$20',
-    image: '',
-    size: { // Adjustable size range
+    image: '/images/Products/axolotl_pink_1.jpg',
+    redirect: 'axolotl',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -112,7 +123,9 @@ const products: Product[] = [
     thirdColor: [],
     price: '$20',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -127,7 +140,9 @@ const products: Product[] = [
     thirdColor: [],
     price: '$25',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -142,7 +157,9 @@ const products: Product[] = [
     thirdColor: [],
     price: '$30',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -157,7 +174,9 @@ const products: Product[] = [
     thirdColor: [],
     price: '$25',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -172,7 +191,9 @@ const products: Product[] = [
     thirdColor: ['red', 'blue'], // Array of color names
     price: '$20',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -187,7 +208,9 @@ const products: Product[] = [
     thirdColor: ['red', 'blue', 'green'], // Array of color names
     price: '$20',
     image: '',
-    size: { // Adjustable size range
+    redirect: '',
+    size: {
+      // Adjustable size range
       min: 0.5, // Minimum size
       max: 1.2, // Maximum size
     },
@@ -236,18 +259,18 @@ const StorePage = () => {
   /* allows for multiple filters */
   const displayedProducts = products.filter((product) => {
     const searchFilter = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const sizeFilter = size
-      ? parseFloat(size) >= product.size.min && parseFloat(size) <= product.size.max
-      : true;
+    const sizeFilter = size ? parseFloat(size) >= product.size.min && parseFloat(size) <= product.size.max : true;
 
-    const primaryColorFilter = selectedPrimaryColors.length === 0
-      || selectedPrimaryColors.some((color) => product.primaryColor.includes(color));
+    // eslint-disable-next-line max-len
+    const primaryColorFilter = selectedPrimaryColors.length === 0;
+    // || selectedPrimaryColors.some((color) => product.primaryColor.includes(color));
 
-    const secondaryColorFilter = selectedSecondaryColors.length === 0
-      || selectedSecondaryColors.some((color) => product.secondaryColor?.includes(color));
+    const secondaryColorFilter = selectedSecondaryColors.length === 0;
+    // || selectedSecondaryColors.some((color) => product.secondaryColor?.includes(color));
 
-    const thirdColorFilter = selectedThirdColors.length === 0
-      || selectedThirdColors.some((color) => product.thirdColor?.includes(color));
+    // eslint-disable-next-line max-len
+    const thirdColorFilter = true;
+    // selectedThirdColors.length === 0 || selectedThirdColors.some((color) => product.thirdColor?.includes(color));
 
     return searchFilter && sizeFilter && primaryColorFilter && secondaryColorFilter && thirdColorFilter;
   });
@@ -260,6 +283,11 @@ const StorePage = () => {
           {/* Does nothing */}
           <h5 className="mt-4">Categories</h5>
           <ul className="list-unstyled">
+            <Link href="/store/cart" passHref>
+              <Button variant="link" className="d-flex align-items-center">
+                Cart
+              </Button>
+            </Link>
             {/* Link to the nested folder */}
             <Link href="/store/dragon" passHref>
               <Button variant="link">Dragon</Button>
@@ -269,6 +297,9 @@ const StorePage = () => {
             </Link>
             <Link href="/store/person" passHref>
               <Button variant="link">Person</Button>
+            </Link>
+            <Link href="/store/bengal" passHref>
+              <Button variant="link">Bengal Temp</Button>
             </Link>
           </ul>
           <h5 className="mt-4">Primary Colors</h5>
@@ -372,7 +403,9 @@ const StorePage = () => {
                 <Card>
                   <Card.Img variant="top" src={product.image} />
                   <Card.Body>
-                    <Card.Title>{product.name}</Card.Title>
+                    <Link href={`/store/${product.redirect}`} passHref>
+                      <Card.Title>{product.name}</Card.Title>
+                    </Link>
                     <Card.Text>{product.type}</Card.Text>
                     {/* for testing remove before product */}
                     <Card.Text>

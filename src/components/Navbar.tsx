@@ -17,7 +17,7 @@ const NavBar: React.FC = () => {
     <Navbar style={{ backgroundColor: '#ff8c00' }} expand="lg">
       <Container>
         <Navbar.Brand href="/">
-          <Image src="/images/3d-wizards-lowres.png" alt="Voxel" width="60" height="60" />
+          <Image src="/images/3DWizardIcon.png" alt="Voxel" width="60" height="60" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

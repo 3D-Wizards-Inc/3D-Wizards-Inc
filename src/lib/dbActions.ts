@@ -1,7 +1,6 @@
 'use server';
 
-import { Stuff, Condition, Option, Size, Color } from '@prisma/client';
-import { ICreateProductForm } from '@/lib/validationSchemas';
+import { Stuff, Condition } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
@@ -62,34 +61,6 @@ export async function deleteStuff(id: number) {
   });
   redirect('/list');
 }
-
-/**
- * Adds or updates a product in the database.
- * @param productData, the product form data of type ICreateProductForm.
- */
-export const upsertProduct = async (productData: ICreateProductForm) => {
-  const data = {
-    option: productData.option as Option,
-    size: productData.size as Size,
-    color: { set: productData.color as Color[] },
-    quantity: productData.quantity,
-    owner: productData.owner,
-  };
-
-  let product;
-  if (productData.id) {
-    product = await prisma.product.update({
-      where: { id: productData.id },
-      data,
-    });
-  } else {
-    product = await prisma.product.create({
-      data,
-    });
-  }
-
-  return product;
-};
 
 /**
  * Creates a new user in the database.

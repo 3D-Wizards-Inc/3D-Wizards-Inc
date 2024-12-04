@@ -1,6 +1,7 @@
 'use client';
 
 import { Instagram } from 'react-bootstrap-icons';
+import Link from 'next/link';
 
 /** The Footer appears at the bottom of every page. Rendered by the App Layout component. */
 const Footer = () => (
@@ -10,21 +11,33 @@ const Footer = () => (
 
         <div className="col-md-4 text-center">
           <h5 className="text-uppercase">NAVIGATION</h5>
-          <p>About Us</p>
-          <p>Employment</p>
-          <p>Pictures</p>
+          <p>
+            <Link href="/about" className="text-decoration-none text-reset">About Us</Link>
+          </p>
+          <p>
+            <Link href=" " className="text-decoration-none text-reset">Employment (make page?) </Link>
+          </p>
+          <p>
+            <Link href="/gallery" className="text-decoration-none text-reset">Pictures (same as gallery?)</Link>
+          </p>
         </div>
 
         <div className="col-md-4 text-center">
           <h5 className="text-uppercase">MAIN MENU</h5>
-          <p>Products</p>
-          <p>Custom Order</p>
-          <p>Business Inquiry</p>
+          <p>
+            <Link href="/gallery" className="text-decoration-none text-reset">Products</Link>
+          </p>
+          <p>
+            <Link href="/custom" className="text-decoration-none text-reset">Custom Order</Link>
+          </p>
+          <p>
+            <Link href="/buisness" className="text-decoration-none text-reset">Business Inquiry</Link>
+          </p>
         </div>
 
         <div className="col-md-4 text-center">
           <h5 className="text-uppercase">CONNECT</h5>
-          <p>Sign up for the latest updates</p>
+          <p>Sign up for the latest updates (this needed?)</p>
           <form>
             <div className="input-group">
               <input

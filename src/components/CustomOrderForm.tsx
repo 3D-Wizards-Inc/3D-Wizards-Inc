@@ -1,147 +1,167 @@
 'use client';
 
-import * as React from 'react';
-import { Form, Button, Col, Container, Row } from 'react-bootstrap';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { upsertProduct } from '@/lib/dbActions';
-import swal from 'sweetalert';
-import { CreateProductSchema, ICreateProductForm } from '@/lib/validationSchemas';
-import { Option, Size, Color } from '@prisma/client';
+import React, { useState } from 'react';
 
-const CustomOrderForm = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm<ICreateProductForm>({
-    resolver: yupResolver(CreateProductSchema),
-  });
+const styles: { [key: string]: React.CSSProperties } = {
+  container: {
+    width: '500px',
+    margin: '20px auto',
+    padding: '15px',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    textAlign: 'center',
+    fontFamily: 'Arial, sans-serif',
+  },
+  header: {
+    marginBottom: '15px',
+    fontSize: '22px',
+  },
+  selectContainer: {
+    marginBottom: '15px',
+  },
+  dropdown: {
+    width: '100%',
+    padding: '12px',
+    fontSize: '18px',
+    borderRadius: '6px',
+    border: '1px solid #ccc',
+  },
+  textarea: {
+    width: '100%',
+    height: '200px',
+    marginBottom: '20px',
+    padding: '10px',
+    fontSize: '16px',
+    borderRadius: '8px',
+    border: '1px solid #ccc',
+    resize: 'none',
+  },
+  materialButtons: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '15px',
+  },
+  materialButton: {
+    padding: '10px 15px',
+    fontSize: '16px',
+    border: '1px solid #ccc',
+    borderRadius: '6px',
+    backgroundColor: '#f5f5f5',
+    cursor: 'pointer',
+    flex: 1,
+    margin: '0 5px',
+  },
+  submitButton: {
+    width: '100%',
+    padding: '12px',
+    fontSize: '18px',
+    borderRadius: '6px',
+    border: '1px solid #ccc',
+    backgroundColor: '#4CAF50',
+    color: 'white',
+    cursor: 'pointer',
+  },
+};
 
-  const onSubmit = async (data: ICreateProductForm) => {
-    // Ensure `color` is properly cleaned and doesn't have `undefined`
-    const sanitizedData: ICreateProductForm = {
-      ...data,
-      color: (data.color || []).filter((color) => color !== undefined) as Color[], // Remove undefined values
-    };
+const CustomOrderForm: React.FC = () => {
+  const [requestType, setRequestType] = useState('');
+  const [requestDetails, setRequestDetails] = useState('');
+  const [selectedMaterial, setSelectedMaterial] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-    const result = await upsertProduct(sanitizedData);
-    if (result) {
-      swal('Success!', 'Order saved successfully!', 'success');
-      reset(); // Reset the form after successful submission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!requestType || !requestDetails || !selectedMaterial) {
+      setError('Please fill out all fields before submitting.');
+      setSuccessMessage('');
     } else {
-      swal('Error!', 'Failed to save order!', 'error');
+      setError('');
+      setSuccessMessage(
+        'Your form has been submitted. Please wait for an email with further details.',
+      );
+      console.log({ requestType, requestDetails, selectedMaterial });
+      // Reset form fields
+      setRequestType('');
+      setRequestDetails('');
+      setSelectedMaterial('');
     }
   };
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        {/* Option and Size Fields */}
-        <Row className="py-1">
-          <Col>
-            <Form.Group controlId="formOption">
-              <Form.Label>Option</Form.Label>
-              <Form.Select
-                {...register('option')}
-                className={`form-control ${errors.option ? 'is-invalid' : ''}`}
-              >
-                {Object.values(Option).map((option) => (
-                  <option key={option as string} value={option as string}>
-                    {option as string}
-                  </option>
-                ))}
-              </Form.Select>
-              <div className="invalid-feedback">{errors.option?.message}</div>
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="formSize">
-              <Form.Label>Size</Form.Label>
-              <Form.Select
-                {...register('size')}
-                className={`form-control ${errors.size ? 'is-invalid' : ''}`}
-              >
-                {Object.values(Size).map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </Form.Select>
-              <div className="invalid-feedback">{errors.size?.message}</div>
-            </Form.Group>
-          </Col>
-        </Row>
+    <div style={styles.container}>
+      <h2 style={styles.header}>Custom Request:</h2>
+      <form onSubmit={handleSubmit}>
+        {/* Dropdown */}
+        <div style={styles.selectContainer}>
+          <select
+            style={styles.dropdown}
+            value={requestType}
+            onChange={(e) => setRequestType(e.target.value)}
+          >
+            <option value="">Select Request Type</option>
+            <option value="Option 1">Option 1</option>
+            <option value="Option 2">Option 2</option>
+            <option value="Option 3">Option 3</option>
+          </select>
+        </div>
 
-        {/* Color Checkboxes */}
-        <Row className="py-1">
-          <Col>
-            <Form.Group controlId="formColor">
-              <Form.Label>Color</Form.Label>
-              <Controller
-                control={control}
-                name="color"
-                render={({ field: { value, onChange } }) => (
-                  <div>
-                    {Object.values(Color).map((color) => (
-                      <div key={color}>
-                        <Form.Check
-                          type="checkbox"
-                          id={`color-${color}`}
-                          label={color}
-                          value={color}
-                          checked={value?.includes(color)}
-                          onChange={(e) => {
-                            const newValue = e.target.checked
-                              ? [...(value || []), color]
-                              : value.filter((item: Color) => item !== color);
-                            onChange(newValue);
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              />
-              <div className="invalid-feedback">{errors.color?.message}</div>
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="formQuantity">
-              <Form.Label>Quantity</Form.Label>
-              <Form.Control
-                type="number"
-                {...register('quantity')}
-                className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
-              />
-              <div className="invalid-feedback">{errors.quantity?.message}</div>
-            </Form.Group>
-          </Col>
-        </Row>
+        {/* Textarea */}
+        <textarea
+          style={styles.textarea}
+          placeholder="Your request here"
+          value={requestDetails}
+          onChange={(e) => setRequestDetails(e.target.value)}
+        />
 
-        {/* Owner Field */}
-        <Row className="py-1">
-          <Col>
-            <Form.Group controlId="formOwner">
-              <Form.Label>Owner</Form.Label>
-              <Form.Control
-                type="text"
-                {...register('owner')}
-                className={`form-control ${errors.owner ? 'is-invalid' : ''}`}
-              />
-              <div className="invalid-feedback">{errors.owner?.message}</div>
-            </Form.Group>
-          </Col>
-        </Row>
+        {/* Material Buttons */}
+        <div style={styles.materialButtons}>
+          <button
+            type="button"
+            style={{
+              ...styles.materialButton,
+              backgroundColor: selectedMaterial === 'Material 1' ? '#cce5ff' : '',
+            }}
+            onClick={() => setSelectedMaterial('Material 1')}
+          >
+            Material 1
+          </button>
+          <button
+            type="button"
+            style={{
+              ...styles.materialButton,
+              backgroundColor: selectedMaterial === 'Material 2' ? '#cce5ff' : '',
+            }}
+            onClick={() => setSelectedMaterial('Material 2')}
+          >
+            Material 2
+          </button>
+          <button
+            type="button"
+            style={{
+              ...styles.materialButton,
+              backgroundColor: selectedMaterial === 'Material 3' ? '#cce5ff' : '',
+            }}
+            onClick={() => setSelectedMaterial('Material 3')}
+          >
+            Material 3
+          </button>
+        </div>
+
+        {/* Error Message */}
+        {error && <p style={{ color: 'red', marginBottom: '10px' }}>{error}</p>}
+
+        {/* Success Message */}
+        {successMessage && (
+          <p style={{ color: 'green', marginBottom: '10px' }}>{successMessage}</p>
+        )}
 
         {/* Submit Button */}
-        <Button variant="primary" type="submit" className="mt-3">
-          Submit Order
-        </Button>
-      </Form>
-    </Container>
+        <button type="submit" style={styles.submitButton}>
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 
