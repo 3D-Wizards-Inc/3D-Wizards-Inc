@@ -1,7 +1,6 @@
-/* eslint-disable react/jsx-indent, @typescript-eslint/indent */
-
 'use client';
 
+import React from 'react';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown, Image } from 'react-bootstrap';
@@ -13,22 +12,16 @@ const NavBar: React.FC = () => {
   const userWithRole = session?.user as { email: string; randomKey: string };
   const role = userWithRole?.randomKey;
   const pathName = usePathname();
+
   return (
     <Navbar style={{ backgroundColor: '#ff8c00' }} expand="lg">
       <Container>
-        <Navbar.Brand href="#">
-          <Image src="/images/3d-wizards-lowres.png" alt="Voxel" width="60" height="60" />
+        <Navbar.Brand href="/">
+          <Image src="/images/3DWizardIcon.png" alt="Voxel" width="60" height="60" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto justify-content-start">
-            {currentUser
-              ? [
-                  <Nav.Link id="add-stuff-nav" href="/add" key="add" active={pathName === '/add'}>
-                    Account
-                  </Nav.Link>,
-                ]
-              : ''}
             <Nav.Link id="store-page-nav" href="/store" key="store" active={pathName === '/store'}>
               Store
             </Nav.Link>
@@ -38,7 +31,10 @@ const NavBar: React.FC = () => {
             <Nav.Link id="about-page-nav" href="/about" key="about" active={pathName === '/about'}>
               About us
             </Nav.Link>
-            <Nav.Link id="buisness-page-nav" href="/buis" key="buis" active={pathName === '/buisness'}>
+            <Nav.Link id="custom-page-nav" href="/gallery" key="gallery" active={pathName === '/gallery'}>
+              Gallery
+            </Nav.Link>
+            <Nav.Link id="business-page-nav" href="/business" key="business" active={pathName === '/business'}>
               Business Inquiries
             </Nav.Link>
             {currentUser && role === 'ADMIN' ? (
@@ -52,6 +48,14 @@ const NavBar: React.FC = () => {
           <Nav>
             {session ? (
               <NavDropdown id="login-dropdown" title={currentUser}>
+                <NavDropdown.Item id="login-dropdown-account" href="/auth/account">
+                  <Lock />
+                  Account
+                </NavDropdown.Item>
+                <NavDropdown.Item id="login-dropdown-cart" href="/auth/cart">
+                  <Lock />
+                  Cart
+                </NavDropdown.Item>
                 <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
                   <BoxArrowRight />
                   Sign Out
