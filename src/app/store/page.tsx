@@ -107,7 +107,7 @@ const products: Product[] = [
     thirdColor: [],
     price: '$20',
     image: '',
-    redirect: '',
+    redirect: 'frog',
     size: {
       // Adjustable size range
       min: 0.5, // Minimum size
