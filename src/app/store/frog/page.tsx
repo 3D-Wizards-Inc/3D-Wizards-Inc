@@ -167,6 +167,19 @@ const FrogPage: React.FC = () => {
               </select>
               <div className="invalid-feedback">{errors.size?.message}</div>
             </Form.Group>
+            <h5 className="mt-3">Quantity</h5>
+            <Form.Group controlId="quantity">
+              <Form.Label>Select Quantity</Form.Label>
+              <select {...register('quantity')} className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}>
+                {Array.from({ length: 10 }, (_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {i + 1}
+                  </option>
+                ))}
+                <option value="10+">10+</option>
+              </select>
+              <div className="invalid-feedback">{errors.quantity?.message}</div>
+            </Form.Group>
             {/* Hidden inputs */}
             <input type="hidden" {...register('owner')} value={currentUser} />
             <input type="hidden" {...register('option')} value="FROG" />
