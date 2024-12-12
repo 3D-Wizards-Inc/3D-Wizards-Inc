@@ -1,9 +1,10 @@
 import { getServerSession } from 'next-auth';
 import { Col, Container, Row, Table } from 'react-bootstrap';
-import StuffItemAdmin from '@/components/StuffItemAdmin';
+import AdminProductRender from '@/components/AdminProductRender';
 import { prisma } from '@/lib/prisma';
 import { adminProtectedPage } from '@/lib/page-protection';
 import authOptions from '@/lib/authOptions';
+import React from 'react';
 
 const AdminPage = async () => {
   const session = await getServerSession(authOptions);
@@ -12,28 +13,46 @@ const AdminPage = async () => {
       user: { email: string; id: string; randomKey: string };
     } | null,
   );
-  const stuff = await prisma.stuff.findMany({});
+
   const users = await prisma.user.findMany({});
+  const products = await prisma.product.findMany({
+    where: { checkedout: true },
+  });
 
   return (
     <main>
       <Container id="list" fluid className="py-3">
         <Row>
           <Col>
-            <h1>List Stuff Admin</h1>
+            <h1>Checked out products</h1>
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Quantity</th>
-                  <th>Condition</th>
                   <th>Owner</th>
-                  <th>Actions</th>
+                  <th>Option</th>
+                  <th>Size</th>
+                  <th>Primary Color</th>
+                  <th>Secondary Color</th>
+                  <th>Tertiary Color</th>
+                  <th>Quantity</th>
                 </tr>
               </thead>
               <tbody>
-                {stuff.map((item) => (
-                  <StuffItemAdmin key={item.id} {...item} />
+                {users.map((user) => (
+                  <React.Fragment key={user.id}>
+                    {/* inserts row per user in the database */}
+                    <tr>
+                      <td colSpan={8}>
+                        <strong>{user.email}</strong>
+                      </td>
+                    </tr>
+                    {/* should display all products where the owner fits the user.email property of above */}
+                    {products
+                      .filter((product) => product.owner === user.email) // product filtering by email
+                      .map((product) => (
+                        <AdminProductRender key={product.id} {...product} />
+                      ))}
+                  </React.Fragment>
                 ))}
               </tbody>
             </Table>
@@ -41,7 +60,7 @@ const AdminPage = async () => {
         </Row>
         <Row>
           <Col>
-            <h1>List Users Admin</h1>
+            <h1>Registered users list</h1>
             <Table striped bordered hover>
               <thead>
                 <tr>

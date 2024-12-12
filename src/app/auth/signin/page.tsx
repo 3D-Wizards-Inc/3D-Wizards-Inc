@@ -2,6 +2,7 @@
 
 import { signIn } from 'next-auth/react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import '../styles.css';
 
 /** The sign in page. */
 const SignIn = () => {
@@ -14,7 +15,7 @@ const SignIn = () => {
     const email = target.email.value;
     const password = target.password.value;
     const result = await signIn('credentials', {
-      callbackUrl: '/list',
+      callbackUrl: '/auth/account',
       email,
       password,
     });

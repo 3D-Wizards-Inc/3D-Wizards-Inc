@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { Option, Size, Color } from '@prisma/client';
 
 export const AddStuffSchema = Yup.object({
   name: Yup.string().required(),
@@ -16,22 +15,32 @@ export const EditStuffSchema = Yup.object({
   owner: Yup.string().required(),
 });
 
-// Define the TypeScript interface for the form data
-export interface ICreateProductForm {
-  id?: number;
-  option: Option;
-  size: Size;
-  color: Color[];
-  quantity: number;
-  owner: string;
-}
-
-export const CreateProductSchema = Yup.object({
-  option: Yup.mixed<Option>().oneOf(Object.values(Option)).required('Option is required'),
-  size: Yup.mixed<Size>().oneOf(Object.values(Size)).required('Size is required'),
-  color: Yup.array()
-    .of(Yup.mixed<Color>().oneOf(Object.values(Color)))
-    .required('Color is required'),
-  quantity: Yup.number().required('Quantity is required').positive().integer(),
-  owner: Yup.string().required('Owner is required'),
+export const AddProductSchema = Yup.object({
+  option: Yup.string()
+    .oneOf([
+      'CRYSTAL_DRAGON',
+      'WINGED_CRYSTAL_DRAGON',
+      'MECHANICAL_DRAGON',
+      'IMPERIAL_DRAGON',
+      'FROG',
+      'AXOLOTL',
+      'GECKO',
+      'RAT',
+      'FERRET',
+      'KNIGHT',
+      'SAMURAI',
+    ])
+    .required(),
+  size: Yup.string().oneOf(['x0_5', 'x1', 'x2', 'x3']).required(),
+  color1: Yup.string()
+    .oneOf(['red', 'pink', 'orange', 'yellow', 'green', 'blue', 'purple', 'brown', 'black', 'gray', 'white'])
+    .required(),
+  color2: Yup.string()
+    .oneOf(['red', 'pink', 'orange', 'yellow', 'green', 'blue', 'purple', 'brown', 'black', 'gray', 'white'])
+    .required(),
+  color3: Yup.string()
+    .oneOf(['red', 'pink', 'orange', 'yellow', 'green', 'blue', 'purple', 'brown', 'black', 'gray', 'white'])
+    .required(),
+  quantity: Yup.number().positive().required(),
+  owner: Yup.string().required(),
 });
