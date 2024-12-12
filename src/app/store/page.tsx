@@ -157,7 +157,7 @@ const products: Product[] = [
     thirdColor: [],
     price: '$30',
     image: '',
-    redirect: '',
+    redirect: 'ferret',
     size: {
       // Adjustable size range
       min: 0.5, // Minimum size
@@ -191,7 +191,7 @@ const products: Product[] = [
     thirdColor: [],
     price: '$25',
     image: '',
-    redirect: '',
+    redirect: 'imperialdragon',
     size: {
       // Adjustable size range
       min: 0.5, // Minimum size
@@ -208,7 +208,7 @@ const products: Product[] = [
     thirdColor: ['red', 'blue'], // Array of color names
     price: '$20',
     image: '',
-    redirect: '',
+    redirect: 'knight',
     size: {
       // Adjustable size range
       min: 0.5, // Minimum size
@@ -225,7 +225,7 @@ const products: Product[] = [
     thirdColor: ['red', 'blue', 'green'], // Array of color names
     price: '$20',
     image: '',
-    redirect: '',
+    redirect: 'samurai',
     size: {
       // Adjustable size range
       min: 0.5, // Minimum size
