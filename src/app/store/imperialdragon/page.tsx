@@ -45,7 +45,7 @@ type Product = {
   pickupInperson?: boolean;
 };
 
-const imperialdragon: Product = {
+const impdragon: Product = {
   name: 'Imperial Dragon',
   type: 'dragon',
   dragon: true,
@@ -60,7 +60,7 @@ const imperialdragon: Product = {
   },
 };
 
-const ImperialDragonPage: React.FC = () => {
+const ImpDragonPage: React.FC = () => {
   const { data: session, status } = useSession();
   const currentUser = session?.user?.email || '';
   const {
@@ -85,8 +85,8 @@ const ImperialDragonPage: React.FC = () => {
           <Card className="border-0">
             <Card.Img
               variant="top"
-              src={imperialdragon.image}
-              alt={imperialdragon.name}
+              src={impdragon.image}
+              alt={impdragon.name}
               className="img-fluid"
               style={{ height: '500px' }}
             />
@@ -95,10 +95,22 @@ const ImperialDragonPage: React.FC = () => {
 
         {/* Details Section */}
         <Col md={6}>
-          <h1>{imperialdragon.name}</h1>
-          <h2>{imperialdragon.price}</h2>
+          <h1>{impdragon.name}</h1>
+          <h2>{impdragon.price}</h2>
           <hr />
           <Form onSubmit={handleSubmit(onSubmit)}>
+            <h5 className="mt-4">Quantity</h5>
+            <Form.Group controlId="Quantity">
+              <Form.Label>Select Quantity</Form.Label>
+              <Form.Control
+                type="number"
+                min="1"
+                max="100"
+                {...register('quantity')}
+                className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
+              />
+              <div className="invalid-feedback">{errors.quantity?.message}</div>
+            </Form.Group>
             <h5 className="mt-4">Primary Colors</h5>
             <Form.Group controlId="primaryColors">
               <Form.Label>Select Primary Color</Form.Label>
@@ -167,36 +179,9 @@ const ImperialDragonPage: React.FC = () => {
               </select>
               <div className="invalid-feedback">{errors.size?.message}</div>
             </Form.Group>
-            <h5 className="mt-3">Quantity</h5>
-            <Form.Group controlId="quantity">
-              <Form.Label>Select Quantity</Form.Label>
-              <select {...register('quantity')} className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}>
-                {Array.from({ length: 10 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-                <option value="10+">10+</option>
-              </select>
-              <div className="invalid-feedback">{errors.quantity?.message}</div>
-            </Form.Group>
-            <h5 className="mt-3">Quantity</h5>
-            <Form.Group controlId="quantity">
-              <Form.Label>Select Quantity</Form.Label>
-              <select {...register('quantity')} className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}>
-                {Array.from({ length: 10 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-                <option value="10+">10+</option>
-              </select>
-              <div className="invalid-feedback">{errors.quantity?.message}</div>
-            </Form.Group>
             {/* Hidden inputs */}
             <input type="hidden" {...register('owner')} value={currentUser} />
             <input type="hidden" {...register('option')} value="IMPERIAL_DRAGON" />
-            <input type="hidden" {...register('quantity')} value={1} />
             <Form.Group className="form-group">
               <Row className="pt-3">
                 <Col>
@@ -213,4 +198,4 @@ const ImperialDragonPage: React.FC = () => {
   );
 };
 
-export default ImperialDragonPage;
+export default ImpDragonPage;

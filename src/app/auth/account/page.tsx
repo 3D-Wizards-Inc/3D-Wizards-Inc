@@ -9,17 +9,36 @@ import { redirect } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
 const AccountPage = () => {
+  // State variables for name, email, address, phone number, and edit status
   const [name, setName] = useState('John Doe');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('123 Main St, City, Country');
   const [phone, setPhone] = useState('(123) 456-7890');
   const [isEditing, setIsEditing] = useState(false);
+
   const { data: session, status } = useSession();
   const currentUser = session?.user?.email || '';
 
   useEffect(() => {
+    // Sync the email state with the current user's email from the session
     setEmail(currentUser);
+
+    // Load user data from localStorage on component mount (if available)
+    const savedName = localStorage.getItem('name');
+    const savedAddress = localStorage.getItem('address');
+    const savedPhone = localStorage.getItem('phone');
+
+    if (savedName) setName(savedName);
+    if (savedAddress) setAddress(savedAddress);
+    if (savedPhone) setPhone(savedPhone);
   }, [currentUser]);
+
+  useEffect(() => {
+    // Save the updated fields to localStorage whenever they change
+    if (name) localStorage.setItem('name', name);
+    if (address) localStorage.setItem('address', address);
+    if (phone) localStorage.setItem('phone', phone);
+  }, [name, address, phone]);
 
   if (status === 'loading') {
     return <LoadingSpinner />;
@@ -29,39 +48,21 @@ const AccountPage = () => {
     redirect('/auth/signin');
   }
 
+  // Handle toggling edit mode
   const handleEdit = () => setIsEditing(true);
 
-  const handleSave = async () => {
+  // Handle saving the updated information
+  const handleSave = () => {
     setIsEditing(false);
-    // Prepare the data to send to the API
-    const updatedUser = { name, email, address, phone };
-
-    try {
-      // Send the updated user data to the API (POST request)
-      const response = await fetch('/api/user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedUser),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log('User updated successfully:', data);
-        // Optionally display a success message to the user
-      } else {
-        console.error('Error saving user:', data.message);
-        // Optionally display an error message to the user
-      }
-    } catch (error) {
-      console.error('An unexpected error occurred:', error);
-    }
+    // Save to localStorage or send to backend if needed
+    localStorage.setItem('name', name);
+    localStorage.setItem('address', address);
+    localStorage.setItem('phone', phone);
+    console.log('Saved:', { name, email, address, phone });
   };
 
   return (
-    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', paddingTop: '50px' }}>
+    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100%', paddingBottom: '20px' }}>
       <div
         style={{
           maxWidth: '400px',
@@ -73,6 +74,7 @@ const AccountPage = () => {
           backgroundColor: '#fff',
         }}
       >
+        {/* Profile Image */}
         <img
           src="https://via.placeholder.com/100"
           alt="Profile"
@@ -80,8 +82,11 @@ const AccountPage = () => {
         />
         <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>Account Details</h1>
 
+        {/* Name Field */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', marginBottom: '15px' }}>
-          <label htmlFor="name" style={{ fontWeight: '500', marginBottom: '5px' }}>Name:</label>
+          <label htmlFor="name" style={{ fontWeight: '500', marginBottom: '5px' }}>
+            Name:
+          </label>
           {isEditing ? (
             <input
               id="name"
@@ -100,8 +105,11 @@ const AccountPage = () => {
           )}
         </div>
 
+        {/* Email Field */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', marginBottom: '15px' }}>
-          <label htmlFor="email" style={{ fontWeight: '500', marginBottom: '5px' }}>Email:</label>
+          <label htmlFor="email" style={{ fontWeight: '500', marginBottom: '5px' }}>
+            Email:
+          </label>
           {isEditing ? (
             <input
               id="email"
@@ -120,8 +128,11 @@ const AccountPage = () => {
           )}
         </div>
 
+        {/* Address Field */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', marginBottom: '15px' }}>
-          <label htmlFor="address" style={{ fontWeight: '500', marginBottom: '5px' }}>Address:</label>
+          <label htmlFor="address" style={{ fontWeight: '500', marginBottom: '5px' }}>
+            Address:
+          </label>
           {isEditing ? (
             <input
               id="address"
@@ -140,8 +151,11 @@ const AccountPage = () => {
           )}
         </div>
 
+        {/* Phone Field */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', marginBottom: '15px' }}>
-          <label htmlFor="phone" style={{ fontWeight: '500', marginBottom: '5px' }}>Phone Number:</label>
+          <label htmlFor="phone" style={{ fontWeight: '500', marginBottom: '5px' }}>
+            Phone Number:
+          </label>
           {isEditing ? (
             <input
               id="phone"
@@ -160,6 +174,7 @@ const AccountPage = () => {
           )}
         </div>
 
+        {/* Edit/Save Button */}
         <button
           type="button"
           onClick={isEditing ? handleSave : handleEdit}

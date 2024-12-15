@@ -99,6 +99,18 @@ const SamuraiPage: React.FC = () => {
           <h2>{samurai.price}</h2>
           <hr />
           <Form onSubmit={handleSubmit(onSubmit)}>
+            <h5 className="mt-4">Quantity</h5>
+            <Form.Group controlId="Quantity">
+              <Form.Label>Select Quantity</Form.Label>
+              <Form.Control
+                type="number"
+                min="1"
+                max="100"
+                {...register('quantity')}
+                className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
+              />
+              <div className="invalid-feedback">{errors.quantity?.message}</div>
+            </Form.Group>
             <h5 className="mt-4">Primary Colors</h5>
             <Form.Group controlId="primaryColors">
               <Form.Label>Select Primary Color</Form.Label>
@@ -167,36 +179,9 @@ const SamuraiPage: React.FC = () => {
               </select>
               <div className="invalid-feedback">{errors.size?.message}</div>
             </Form.Group>
-            <h5 className="mt-3">Quantity</h5>
-            <Form.Group controlId="quantity">
-              <Form.Label>Select Quantity</Form.Label>
-              <select {...register('quantity')} className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}>
-                {Array.from({ length: 10 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-                <option value="10+">10+</option>
-              </select>
-              <div className="invalid-feedback">{errors.quantity?.message}</div>
-            </Form.Group>
-            <h5 className="mt-3">Quantity</h5>
-            <Form.Group controlId="quantity">
-              <Form.Label>Select Quantity</Form.Label>
-              <select {...register('quantity')} className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}>
-                {Array.from({ length: 10 }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-                <option value="10+">10+</option>
-              </select>
-              <div className="invalid-feedback">{errors.quantity?.message}</div>
-            </Form.Group>
             {/* Hidden inputs */}
             <input type="hidden" {...register('owner')} value={currentUser} />
-            <input type="hidden" {...register('option')} value="SAMURAI" />
-            <input type="hidden" {...register('quantity')} value={1} />
+            <input type="hidden" {...register('option')} value="Samurai" />
             <Form.Group className="form-group">
               <Row className="pt-3">
                 <Col>
