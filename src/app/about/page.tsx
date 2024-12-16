@@ -30,8 +30,7 @@ const AboutUsPage = async () => (
           <Row className="mb-4">
             <Col className="d-flex flex-column align-items-center">
               <Image src="/images/Tom.JPG" alt="Tom" width="200" height="300" />
-              <h4>Tom</h4>
-              <br />
+              <h4 className="mt-2">Tom</h4>
               <p>
                 Team Lead, Head of Product Design, Print Farm Manager
               </p>
@@ -40,18 +39,14 @@ const AboutUsPage = async () => (
           <Row className="mb-4">
             <Col className="d-flex flex-column align-items-center">
               <Image src="/images/Aaron.JPG" alt="Aaron" width="200" height="300" />
-              <h4>Aaron</h4>
-              <br />
-              <p>
-                Retail and Business relations Manager
-              </p>
+              <h4 className="mt-2">Aaron</h4>
+              <p>Retail and Business Relations Manager</p>
             </Col>
           </Row>
           <Row className="mb-4">
             <Col className="d-flex flex-column align-items-center">
               <Image src="/images/Jesse.JPG" alt="Jesse" width="200" height="300" />
-              <h4>Jesse</h4>
-              <br />
+              <h4 className="mt-2">Jesse</h4>
               <p>
                 Employee Manager
               </p>
@@ -60,8 +55,7 @@ const AboutUsPage = async () => (
           <Row className="mb-4">
             <Col className="d-flex flex-column align-items-center">
               <Image src="/images/David.JPG" alt="David" width="200" height="300" />
-              <h4>David</h4>
-              <br />
+              <h4 className="mt-2">David</h4>
               <p>
                 Retail Associate and Printer technician
               </p>
