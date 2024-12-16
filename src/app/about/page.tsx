@@ -47,7 +47,7 @@ const AboutUsPage = async () => (
           </Row>
           <Row className="mb-4">
             <Col className="d-flex align-items-start">
-              <Image src="/images/Jesse.JPG" alt="Jesse" width="200" height="300" className="me-3"/>
+              <Image src="/images/Jesse.JPG" alt="Jesse" width="200" height="300" className="me-3" />
               <h4 className="mb-1">Jesse</h4>
               <p className="mb-0">
                 Employee Manager
