@@ -24,7 +24,15 @@ const AdminPage = async () => {
       <Container id="list" fluid className="py-3">
         <Row>
           <Col>
-            <h1>Checked out products</h1>
+            <h1 className="pt-5">Checked out user products</h1>
+            <hr style={{
+              border: 'none',
+              height: '5px',
+              background: 'linear-gradient(to right, #ddd, #bbb, #ddd)',
+              margin: '25px 0',
+              width: '900px',
+            }}
+            />
             <Table striped bordered hover>
               <thead>
                 <tr>
@@ -35,6 +43,7 @@ const AdminPage = async () => {
                   <th>Secondary Color</th>
                   <th>Tertiary Color</th>
                   <th>Quantity</th>
+                  <th>Edit Product</th>
                 </tr>
               </thead>
               <tbody>
@@ -58,9 +67,24 @@ const AdminPage = async () => {
             </Table>
           </Col>
         </Row>
+        <hr style={{
+          border: 'none',
+          height: '2px',
+          background: 'linear-gradient(to right, #ddd, #bbb, #ddd)',
+          margin: '25px 0',
+        }}
+        />
         <Row>
           <Col>
-            <h1>Registered users list</h1>
+            <h1 className="pt-5">Registered users list</h1>
+            <hr style={{
+              border: 'none',
+              height: '5px',
+              background: 'linear-gradient(to right, #ddd, #bbb, #ddd)',
+              margin: '25px 0',
+              width: '900px',
+            }}
+            />
             <Table striped bordered hover>
               <thead>
                 <tr>
