@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { Product } from '@prisma/client';
-import AdminProductRender from '@/components/AdminProductRender';
+import UserProductRender from '@/components/UserProductRender';
 import { Row, Col, Table, Container } from 'react-bootstrap';
 
 const AccountPage = () => {
@@ -248,7 +248,7 @@ const AccountPage = () => {
               <tbody>
                 {/* should display all products where the owner fits the user.email property of above */}
                 {products.filter((product) => product.checkedout === true).map((product) => (
-                  <AdminProductRender key={product.id} {...product} />
+                  <UserProductRender key={product.id} {...product} />
                 ))}
               </tbody>
             </Table>

@@ -1,6 +1,6 @@
 'use server';
 
-import { Stuff, Condition, Option, Size, Color } from '@prisma/client';
+import { Product, Stuff, Condition, Option, Size, Color } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
@@ -87,6 +87,23 @@ export async function addProduct(product: {
     },
   });
   redirect('/auth/cart');
+}
+
+export async function editProduct(product: Product) {
+  await prisma.product.update({
+    where: { id: product.id },
+    data: {
+      option: product.option,
+      size: product.size,
+      quantity: product.quantity,
+      owner: product.owner,
+      color1: product.color1,
+      color2: product.color2,
+      color3: product.color3,
+      checkedout: product.checkedout,
+    },
+  });
+  redirect('/admin');
 }
 
 /**

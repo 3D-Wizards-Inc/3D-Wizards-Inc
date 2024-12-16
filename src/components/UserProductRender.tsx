@@ -1,7 +1,7 @@
 import { Product } from '@prisma/client';
 
 /* Renders a single row in the List Product table, used in account products list and admin display. */
-const AdminProductRender = ({ id, option, size, quantity, color1, color2, color3 }: Product) => (
+const UserProductRender = ({ option, size, quantity, color1, color2, color3 }: Product) => (
 
   <tr>
     {/* empty element to sorta shift row right */}
@@ -12,10 +12,7 @@ const AdminProductRender = ({ id, option, size, quantity, color1, color2, color3
     <td>{color2}</td>
     <td>{color3}</td>
     <td>{quantity}</td>
-    <td>
-      <a href={`/edit/${id}`}>Edit</a>
-    </td>
   </tr>
 );
 
-export default AdminProductRender;
+export default UserProductRender;
