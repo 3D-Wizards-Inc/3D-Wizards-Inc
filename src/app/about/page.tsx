@@ -28,8 +28,8 @@ const AboutUsPage = async () => (
         <Col md={8}>
           <h3 className="py-4">Our Team</h3>
           <Row className="mb-4">
-            <Col className="d-flex align-items-center">
-              <Image src="/images/Tom.JPG" alt="Tom" width="240" height="320" />
+            <Col className="d-flex flex-column align-items-center">
+              <Image src="/images/Tom.JPG" alt="Tom" width="200" height="300" />
               <h4>Tom</h4>
               <br />
               <p>
@@ -38,8 +38,8 @@ const AboutUsPage = async () => (
             </Col>
           </Row>
           <Row className="mb-4">
-            <Col className="d-flex align-items-center">
-              <Image src="/images/Aaron.JPG" alt="Aaron" width="240" height="320" />
+            <Col className="d-flex flex-column align-items-center">
+              <Image src="/images/Aaron.JPG" alt="Aaron" width="200" height="300" />
               <h4>Aaron</h4>
               <br />
               <p>
@@ -48,8 +48,8 @@ const AboutUsPage = async () => (
             </Col>
           </Row>
           <Row className="mb-4">
-            <Col className="d-flex align-items-center">
-              <Image src="/images/Jesse.JPG" alt="Jesse" width="240" height="320" />
+            <Col className="d-flex flex-column align-items-center">
+              <Image src="/images/Jesse.JPG" alt="Jesse" width="200" height="300" />
               <h4>Jesse</h4>
               <br />
               <p>
@@ -58,8 +58,8 @@ const AboutUsPage = async () => (
             </Col>
           </Row>
           <Row className="mb-4">
-            <Col className="d-flex align-items-center">
-              <Image src="/images/David.JPG" alt="David" width="240" height="320" />
+            <Col className="d-flex flex-column align-items-center">
+              <Image src="/images/David.JPG" alt="David" width="200" height="300" />
               <h4>David</h4>
               <br />
               <p>
