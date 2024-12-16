@@ -1,7 +1,6 @@
 'use server';
 
-import { Stuff, Condition, Option, Size, Color } from '@prisma/client';
-import { ICreateProductForm } from '@/lib/validationSchemas';
+import { Product, Stuff, Condition, Option, Size, Color } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
@@ -64,32 +63,48 @@ export async function deleteStuff(id: number) {
 }
 
 /**
- * Adds or updates a product in the database.
- * @param productData, the product form data of type ICreateProductForm.
+ * Creates new product in the database.
+ * @param product, an object with the following properties: id, option, size, color, quantity, owner
  */
-export const upsertProduct = async (productData: ICreateProductForm) => {
-  const data = {
-    option: productData.option as Option,
-    size: productData.size as Size,
-    color: { set: productData.color as Color[] },
-    quantity: productData.quantity,
-    owner: productData.owner,
-  };
+export async function addProduct(product: {
+  option: Option;
+  size: Size;
+  color1: Color;
+  color2: Color;
+  color3: Color;
+  quantity: number;
+  owner: string;
+}) {
+  await prisma.product.create({
+    data: {
+      option: product.option,
+      size: product.size,
+      color1: product.color1,
+      color2: product.color2,
+      color3: product.color3,
+      quantity: product.quantity,
+      owner: product.owner,
+    },
+  });
+  redirect('/auth/cart');
+}
 
-  let product;
-  if (productData.id) {
-    product = await prisma.product.update({
-      where: { id: productData.id },
-      data,
-    });
-  } else {
-    product = await prisma.product.create({
-      data,
-    });
-  }
-
-  return product;
-};
+export async function editProduct(product: Product) {
+  await prisma.product.update({
+    where: { id: product.id },
+    data: {
+      option: product.option,
+      size: product.size,
+      quantity: product.quantity,
+      owner: product.owner,
+      color1: product.color1,
+      color2: product.color2,
+      color3: product.color3,
+      checkedout: product.checkedout,
+    },
+  });
+  redirect('/admin');
+}
 
 /**
  * Creates a new user in the database.
@@ -117,4 +132,46 @@ export async function changePassword(credentials: { email: string; password: str
       password,
     },
   });
+}
+
+/**
+ * Updates the 'checkedout' field to true for all products owned by the specified owner.
+ * @param owner The email of the owner whose products will be checked out.
+ */
+export async function checkoutProducts(owner: string) {
+  await prisma.product.updateMany({
+    where: {
+      owner,
+      checkedout: false, // Only update products not already checked out
+    },
+    data: {
+      checkedout: true,
+    },
+  });
+  redirect('/auth/cart'); // Redirect to the cart page after checkout
+}
+
+/**
+ * Creates a new custom order in the database.
+ * @param order, an object with the following properties: user, description, material1, material2, material3, type
+ */
+export async function addCustomOrder(order: {
+  user: string;
+  description: string;
+  material1: string;
+  material2: string;
+  material3: string;
+  type: string;
+}) {
+  await prisma.custom_Orders.create({
+    data: {
+      user: order.user,
+      description: order.description,
+      material1: order.material1,
+      material2: order.material2,
+      material3: order.material3,
+      type: order.type,
+    },
+  });
+  redirect('/auth/account'); // Redirect to orders page after adding
 }

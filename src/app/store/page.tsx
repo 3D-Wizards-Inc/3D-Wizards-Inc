@@ -1,53 +1,310 @@
-import { getServerSession } from 'next-auth';
-import { Col, Container, Row, Table } from 'react-bootstrap';
-import { prisma } from '@/lib/prisma';
-import StuffItem from '@/components/StuffItem';
-import { loggedInProtectedPage } from '@/lib/page-protection';
-import authOptions from '@/lib/authOptions';
+'use client';
 
-/** Render a list of stuff for the logged in user. */
-const ListPage = async () => {
-  // Protect the page, only logged in users can access it.
-  const session = await getServerSession(authOptions);
-  loggedInProtectedPage(
-    session as {
-      user: { email: string; id: string; randomKey: string };
-      // eslint-disable-next-line @typescript-eslint/comma-dangle
-    } | null,
-  );
-  const owner = (session && session.user && session.user.email) || '';
-  const stuff = await prisma.stuff.findMany({
-    where: {
-      owner,
+import React, { useState } from 'react';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import Link from 'next/link';
+
+/* Product data maybe tie to db later */
+type Product = {
+  id: number;
+  name: string;
+  type: string;
+  dragon?: boolean;
+  animal?: boolean;
+  egg?: boolean;
+  person?: boolean;
+  primaryColor: string[];
+  secondaryColor?: string[];
+  thirdColor?: string[];
+  price?: string;
+  basePrice?: string;
+  image: string;
+  redirect: string;
+  size: { min: number; max: number };
+  pickupInperson?: boolean;
+};
+
+const products: Product[] = [
+  {
+    id: 1, // Needs to be diff or breaks code completely
+    name: 'Crystal Dragon',
+    type: 'dragon',
+    dragon: true,
+    primaryColor: ['red', 'blue', 'green'], // Array of color names
+    secondaryColor: ['red', 'blue'], // Array of color names
+    thirdColor: [],
+    price: '$25',
+    image: '/images/Products/crystaldragon_blackgold_1.jpg',
+    redirect: 'crystaldragon',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
     },
+    pickupInperson: true,
+  },
+  {
+    id: 2, // Needs to be diff or breaks code completely
+    name: 'Winged Crystal Dragon',
+    type: 'dragon',
+    dragon: true,
+    primaryColor: ['red', 'blue', 'green'], // Array of color names
+    secondaryColor: ['red', 'blue'], // Array of color names
+    thirdColor: [],
+    price: '$25',
+    image: '/images/Products/wingedcrystal_blueshimmer_1.jpg',
+    redirect: 'wingedcrystal',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+    pickupInperson: true,
+  },
+  {
+    id: 3,
+    name: 'Mech dragon',
+    type: 'dragon',
+    dragon: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: [], // Array of color names
+    thirdColor: [],
+    price: '$25',
+    image: '/images/Products/mechanical_dragon_blk_1.jpg',
+    redirect: 'mechdragon',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+  // add adjustable price later dont know how to make without making a new
+  {
+    id: 4,
+    name: 'Frog',
+    type: 'animal',
+    animal: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: [], // Array of color names
+    thirdColor: [],
+    price: '$10',
+    image: '/images/Products/frog_gradiant_1.jpg',
+    redirect: 'frog',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+  {
+    id: 5,
+    name: 'Axolotl',
+    type: 'animal',
+    animal: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: [], // Array of color names
+    thirdColor: [],
+    price: '$20',
+    image: '/images/Products/axolotl_pink_1.jpg',
+    redirect: 'axolotl',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+  {
+    id: 6,
+    name: 'Gecko',
+    type: 'animal',
+    animal: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: [], // Array of color names
+    thirdColor: [],
+    price: '$20',
+    image: '/images/Products/gecko.jpg',
+    redirect: 'gecko',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+  {
+    id: 7,
+    name: 'Rat',
+    type: 'animal',
+    animal: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: [], // Array of color names
+    thirdColor: [],
+    price: '$25',
+    image: '/images/Products/rat_brwnpnk_1.jpg',
+    redirect: 'rat',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+  {
+    id: 8,
+    name: 'Ferret',
+    type: 'animal',
+    animal: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: [], // Array of color names
+    thirdColor: [],
+    price: '$30',
+    image: '/images/Products/ferret.jpg',
+    redirect: 'ferret',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+  {
+    id: 9,
+    name: 'Bengal',
+    type: 'animal',
+    animal: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: [], // Array of color names
+    thirdColor: [],
+    price: '$35',
+    image: '/images/Products/bengal_1.jpg',
+    redirect: 'bengal',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+  {
+    id: 10,
+    name: 'Imperial Dragon',
+    type: 'animal',
+    dragon: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: [], // Array of color names
+    thirdColor: [],
+    price: '$25',
+    image: '/images/Products/impd.jpg',
+    redirect: 'imperialdragon',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+  {
+    id: 11,
+    name: 'Knight',
+    type: 'animal',
+    person: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: ['red', 'blue'], // Array of color names
+    thirdColor: ['red', 'blue'], // Array of color names
+    price: '$20',
+    image: '/images/Products/knight.jpg',
+    redirect: 'knight',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+  {
+    id: 12,
+    name: 'Samurai',
+    type: 'animal',
+    person: true,
+    primaryColor: ['red', 'blue'], // Array of color names
+    secondaryColor: ['red', 'blue'], // Array of color names
+    thirdColor: ['red', 'blue', 'green'], // Array of color names
+    price: '$20',
+    image: '/images/Products/samurai.jpg',
+    redirect: 'samurai',
+    size: {
+      // Adjustable size range
+      min: 0.5, // Minimum size
+      max: 1.2, // Maximum size
+    },
+  },
+];
+
+const StorePage = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const displayedProducts = products.filter((product) => {
+    const searchFilter = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return searchFilter;
   });
-  // console.log(stuff);
+
   return (
-    <main>
-      <Container id="list" fluid className="py-3">
-        <Row>
-          <Col>
-            <h1>Stuff</h1>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Quantity</th>
-                  <th>Condition</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stuff.map((item) => (
-                  <StuffItem key={item.id} {...item} />
-                ))}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-      </Container>
-    </main>
+    <Container fluid>
+      <Row>
+        {/* Sidebar */}
+        <Col md={3} className="border-end">
+          <h5 className="mt-4">Search</h5>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault(); // Prevent page reload on Enter
+            }}
+          >
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter Product Name"
+                value={searchTerm}
+                aria-label="Search"
+                onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+              />
+              <button className="btn btn-dark" type="submit">
+                Search
+              </button>
+            </div>
+          </form>
+        </Col>
+
+        {/* Product Grid */}
+        <Col md={9}>
+          <Row>
+            <Col className="d-flex justify-content-between align-items-center mb-3">
+              <h4>Items</h4>
+            </Col>
+          </Row>
+          <Row>
+            {/* Each "Product" info image, name, cost, etc */}
+            {displayedProducts.map((product) => (
+              <Col md={4} key={product.id} className="mb-4">
+                <Card>
+                  <Card.Img
+                    variant="top"
+                    src={product.image}
+                    style={{
+                      width: '100%', // Ensures it takes the full width of the card
+                      height: '300px', // Sets a fixed height
+                      objectFit: 'cover', // Maintains aspect ratio and fills the area
+                    }}
+                  />
+                  <Card.Body>
+                    <Link href={`/store/${product.redirect}`} passHref>
+                      <Card.Title>{product.name}</Card.Title>
+                    </Link>
+                    <Card.Text>{product.type}</Card.Text>
+                    <Card.Text>{product.price}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
-export default ListPage;
+export default StorePage;

@@ -8,18 +8,18 @@ import swal from 'sweetalert';
 import { Card, Col, Container, Button, Form, Row } from 'react-bootstrap';
 import { changePassword } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import '../styles.css'; // Import the CSS file
 
 type ChangePasswordForm = {
   oldpassword: string;
   password: string;
   confirmPassword: string;
-  // acceptTerms: boolean;
 };
 
-/** The change password page. */
 const ChangePassword = () => {
   const { data: session, status } = useSession();
   const email = session?.user?.email || '';
+
   const validationSchema = Yup.object().shape({
     oldpassword: Yup.string().required('Password is required'),
     password: Yup.string()
@@ -41,7 +41,6 @@ const ChangePassword = () => {
   });
 
   const onSubmit = async (data: ChangePasswordForm) => {
-    // console.log(JSON.stringify(data, null, 2));
     await changePassword({ email, ...data });
     await swal('Password Changed', 'Your password has been changed', 'success', { timer: 2000 });
     reset();
@@ -52,16 +51,16 @@ const ChangePassword = () => {
   }
 
   return (
-    <main>
+    <main className="container-main">
       <Container>
         <Row className="justify-content-center">
           <Col xs={5}>
             <h1 className="text-center">Change Password</h1>
-            <Card>
+            <Card className="card-main">
               <Card.Body>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <Form.Group className="form-group">
-                    <Form.Label>Old Passord</Form.Label>
+                    <Form.Label>Old Password</Form.Label>
                     <input
                       type="password"
                       {...register('oldpassword')}
@@ -79,6 +78,7 @@ const ChangePassword = () => {
                     />
                     <div className="invalid-feedback">{errors.password?.message}</div>
                   </Form.Group>
+
                   <Form.Group className="form-group">
                     <Form.Label>Confirm Password</Form.Label>
                     <input
@@ -88,6 +88,7 @@ const ChangePassword = () => {
                     />
                     <div className="invalid-feedback">{errors.confirmPassword?.message}</div>
                   </Form.Group>
+
                   <Form.Group className="form-group py-3">
                     <Row>
                       <Col>

@@ -1,11 +1,11 @@
-/* eslint-disable react/jsx-indent, @typescript-eslint/indent */
-
 'use client';
 
+import React from 'react';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-import { Container, Nav, Navbar, NavDropdown, Image } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown, Image, Button } from 'react-bootstrap';
 import { BoxArrowRight, Lock, PersonFill, PersonPlusFill } from 'react-bootstrap-icons';
+import Link from 'next/link';
 
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -13,22 +13,16 @@ const NavBar: React.FC = () => {
   const userWithRole = session?.user as { email: string; randomKey: string };
   const role = userWithRole?.randomKey;
   const pathName = usePathname();
+
   return (
     <Navbar style={{ backgroundColor: '#ff8c00' }} expand="lg">
       <Container>
-        <Navbar.Brand href="#">
-          <Image src="/images/3d-wizards-lowres.png" alt="Voxel" width="60" height="60" />
+        <Navbar.Brand href="/">
+          <Image src="/images/3DWizardIcon.png" alt="Voxel" width="60" height="60" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto justify-content-start">
-            {currentUser
-              ? [
-                  <Nav.Link id="add-stuff-nav" href="/add" key="add" active={pathName === '/add'}>
-                    Account
-                  </Nav.Link>,
-                ]
-              : ''}
             <Nav.Link id="store-page-nav" href="/store" key="store" active={pathName === '/store'}>
               Store
             </Nav.Link>
@@ -38,7 +32,10 @@ const NavBar: React.FC = () => {
             <Nav.Link id="about-page-nav" href="/about" key="about" active={pathName === '/about'}>
               About us
             </Nav.Link>
-            <Nav.Link id="buisness-page-nav" href="/buis" key="buis" active={pathName === '/buisness'}>
+            <Nav.Link id="custom-page-nav" href="/gallery" key="gallery" active={pathName === '/gallery'}>
+              Gallery
+            </Nav.Link>
+            <Nav.Link id="business-page-nav" href="/business" key="business" active={pathName === '/business'}>
               Business Inquiries
             </Nav.Link>
             {currentUser && role === 'ADMIN' ? (
@@ -51,16 +48,27 @@ const NavBar: React.FC = () => {
           </Nav>
           <Nav>
             {session ? (
-              <NavDropdown id="login-dropdown" title={currentUser}>
-                <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
-                  <BoxArrowRight />
-                  Sign Out
-                </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
-                  <Lock />
-                  Change Password
-                </NavDropdown.Item>
-              </NavDropdown>
+              <>
+                <NavDropdown id="login-dropdown" title={currentUser}>
+                  <NavDropdown.Item id="login-dropdown-account" href="/auth/account">
+                    <PersonFill />
+                    Account
+                  </NavDropdown.Item>
+                  <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
+                    <BoxArrowRight />
+                    Sign Out
+                  </NavDropdown.Item>
+                  <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
+                    <Lock />
+                    Change Password
+                  </NavDropdown.Item>
+                </NavDropdown>
+                <Link href="/auth/cart" passHref>
+                  <Button variant="link" className="d-flex align-items-center p-0 ms-3">
+                    <img src="/images/shoppingcartIcon.svg" alt="Cart" style={{ width: '24px', height: '24px' }} />
+                  </Button>
+                </Link>
+              </>
             ) : (
               <NavDropdown id="login-dropdown" title="Login">
                 <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">

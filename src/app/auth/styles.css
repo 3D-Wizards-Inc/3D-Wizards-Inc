@@ -1,0 +1,50 @@
+.container-main {
+    padding: 50px 0;
+  }
+  
+  .card-main {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-body {
+    padding: 30px;
+  }
+  
+  h1.text-center {
+    margin-bottom: 20px;
+    color: #000000;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .btn-primary {
+    background-color: #fc8d06;
+    border-color: #fc8d06;
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .btn-warning {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  .invalid-feedback {
+    font-size: 0.875rem;
+    color: #dc3545;
+  }
+  
+  .float-right {
+    float: right;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .col-xs-5 {
+      max-width: 100%;
+    }
+  }
+  
